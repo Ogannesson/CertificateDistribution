@@ -14,12 +14,14 @@ app.MapGet("/", (string path, string file, HttpRequest request) =>
     var configuredApiKey = configuration["ApiKey"];
 
     // 从请求头中获取 API 密钥
-    var apiKey = request.Headers["Authorization"].ToString();
-
+    var apiKey = request.Headers.Authorization.ToString();
     // 检查 API 密钥是否匹配
     if (apiKey != configuredApiKey)
     {
-        return Results.Json(new { error = "Unauthorized access" }, statusCode: StatusCodes.Status401Unauthorized);
+        return Results.Problem(
+            detail: "Unauthorized access",
+            statusCode: StatusCodes.Status401Unauthorized
+        );
     }
 
     // 文件根目录
@@ -31,13 +33,19 @@ app.MapGet("/", (string path, string file, HttpRequest request) =>
     // 验证文件路径是否在允许的根目录内
     if (!fullPath.StartsWith(rootDirectory))
     {
-        return Results.Json(new { error = "Invalid path" }, statusCode: StatusCodes.Status400BadRequest);
+        return Results.Problem(
+            detail: "Invalid file path",
+            statusCode: StatusCodes.Status400BadRequest
+        );
     }
 
     // 检查文件是否存在
     if (!System.IO.File.Exists(fullPath))
     {
-        return Results.Json(new { error = "File not found" }, statusCode: StatusCodes.Status404NotFound);
+        return Results.Problem(
+            detail: "File not found",
+            statusCode: StatusCodes.Status404NotFound
+            );
     }
 
     // 读取文件内容并返回作为下载
