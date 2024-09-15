@@ -1,7 +1,8 @@
-using System.Text.Json;
-using Microsoft.AspNetCore.Http;
-
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.TypeInfoResolver = null;
+});
 var app = builder.Build();
 
 // 获取配置对象
