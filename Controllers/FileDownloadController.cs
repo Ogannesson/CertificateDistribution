@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace FileDownloadApi.Controllers
+namespace CertificateDistribution.Controllers
 {
     /// <summary>
     /// 文件下载控制器，用于处理文件下载请求。
     /// </summary>
     [ApiController]
-    [Route("[controller]")]
+    [Route("/")]
     public class FileDownloadController : ControllerBase
     {
         private readonly IConfiguration _configuration;
